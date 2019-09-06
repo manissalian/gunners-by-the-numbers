@@ -1,34 +1,65 @@
 <template>
-  <div>
+  <div
+    class="layout">
+    <headerr />
     <nuxt
-      class="container" />
+      class="container"
+    />
   </div>
 </template>
 
-<style scoped>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
+<script>
+import headerr from '@/components/header'
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 100vh;
+export default {
+  components: {
+    headerr
+  }
 }
+</script>
+
+<style scoped>
+  .layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .container {
+    flex: 1;
+    width: 100%;
+    max-width: 1366px;
+    padding-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+  }
 </style>
 
 <style>
-body {
-margin: 0;
-}
+  html {
+    font-size: 12px;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  body {
+    font-family: MartelRegular;
+    background-color: #dddddd;
+  }
+
+  @font-face {
+    font-family: 'MartelRegular';
+    src: url('../assets/fonts/martel_regular.woff') format('woff');
+  }
+
+  @media screen and (min-width: 768px) {
+    html {
+      font-size: 16px;
+    }
+  }
 </style>

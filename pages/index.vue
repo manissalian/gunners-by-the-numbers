@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h1 class="title">
-      gunners-by-the-numbers
-    </h1>
+    <next-match />
   </div>
 </template>
 
 <script>
+import NextMatch from '@/components/nextMatch'
+
 export default {
+  components: {
+    NextMatch
+  }
 }
 </script>
-
-<style scoped>
-</style>
