@@ -3,7 +3,10 @@
     class="header">
     <div
       class="inner">
-      <logo />
+      <div
+        @click="logoClicked">
+        <logo/>
+      </div>
     </div>
   </div>
 </template>
@@ -14,6 +17,11 @@ import Logo from '@/components/logo'
 export default {
   components: {
     Logo
+  },
+  methods: {
+    logoClicked () {
+      this.$router.push('/')
+    }
   }
 }
 </script>

@@ -1,10 +1,9 @@
 <template>
   <div
     class="layout">
-    <headerr />
+    <headerr/>
     <nuxt
-      class="container"
-    />
+      class="container"/>
   </div>
 </template>
 
@@ -29,12 +28,9 @@ export default {
     flex: 1;
     width: 100%;
     max-width: 1366px;
-    padding-top: 1rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 2rem;
     margin-left: auto;
     margin-right: auto;
-    box-sizing: border-box;
   }
 </style>
 
@@ -45,6 +41,7 @@ export default {
 
   * {
     margin: 0;
+    box-sizing: border-box;
   }
 
   body {

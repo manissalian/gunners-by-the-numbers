@@ -43,7 +43,7 @@
 <style scoped>
   .next-match {
     position: relative;
-    max-width: 700px;
+    max-width: 768px;
     margin-left: auto;
     margin-right: auto;
   }
