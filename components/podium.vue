@@ -55,6 +55,7 @@ export default {
     position: relative;
     flex: 1;
     margin-top: 2rem;
+    cursor: pointer;
   }
 
   .img-wrapper {

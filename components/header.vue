@@ -3,10 +3,9 @@
     class="header">
     <div
       class="inner">
-      <div
-        @click="logoClicked">
+      <router-link to="/">
         <logo/>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -17,11 +16,6 @@ import Logo from '@/components/logo'
 export default {
   components: {
     Logo
-  },
-  methods: {
-    logoClicked () {
-      this.$router.push('/')
-    }
   }
 }
 </script>

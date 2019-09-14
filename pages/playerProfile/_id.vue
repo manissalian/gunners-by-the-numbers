@@ -19,8 +19,12 @@
             <td>20</td>
           </tr>
           <tr>
+            <th>Draws:</th>
+            <td>7</td>
+          </tr>
+          <tr>
             <th>Losses:</th>
-            <td>10</td>
+            <td>3</td>
           </tr>
           <tr>
             <th>Goals:</th>
@@ -80,7 +84,7 @@ export default {
   }
 
   .top td {
-    padding-left: 2rem;
+    padding-left: 4rem;
   }
 
   @media screen and (min-width: 1024px) {
