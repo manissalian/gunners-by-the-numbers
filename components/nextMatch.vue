@@ -4,7 +4,11 @@
     class="next-match">
     <img
       class="tournament-logo"
-      src="@/assets/logos/tournaments/premierLeague.png"/>
+      :style="{
+        height: data.tournament === 'europaLeague' ? '4.5rem' : 'auto',
+        width: data.tournament === 'premierLeague' ? '5.5rem' : 'auto',
+      }"
+      :src="require(`@/assets/logos/tournaments/${data.tournament}.png`)"/>
     <div
       class="title">Next Match</div>
     <div
@@ -60,6 +64,7 @@ export default {
       url: 'http://localhost:8000/match/next'
     }).then((res) => {
       const doc = res.data.doc
+
       this.data = doc
     })
   },
@@ -81,8 +86,6 @@ export default {
 
   .tournament-logo {
     position: absolute;
-    width: 13%;
-    min-width: 5rem;
   }
 
   .title {
@@ -91,12 +94,16 @@ export default {
   }
 
   .date {
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.9rem;
     text-align: center;
   }
 
   .stadium {
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #696969;
   }
 
@@ -109,7 +116,9 @@ export default {
   }
 
   .team-wrapper {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .team {
