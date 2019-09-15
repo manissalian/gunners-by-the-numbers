@@ -3,7 +3,7 @@
     class="mini-league-table">
     <img
       class="title"
-      src="@/assets/logos/premier_league.png"/>
+      src="@/assets/logos/tournaments/premierLeague.png"/>
     <table>
       <tr
         v-for="(t, i) in data"
@@ -13,7 +13,7 @@
           class="position">{{ i + 1 }}</td>
         <td>
           <img
-            src="@/assets/logos/arsenal.png"
+            src="@/assets/logos/teams/arsenal.svg"
             class="logo"/>
         </td>
         <td

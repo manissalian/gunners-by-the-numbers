@@ -1,16 +1,20 @@
 <template>
   <div
+    v-if="data"
     class="next-match">
     <img
       class="tournament-logo"
-      src="@/assets/logos/premier_league.png"/>
+      src="@/assets/logos/tournaments/premierLeague.png"/>
     <div
       class="title">Next Match</div>
     <div
-      class="date">10 October 2:30PM</div>
+      class="date">{{ formatDate(new Date(data.date)) }}</div>
     <div
-      class="stadium">Emirates Stadium</div>
+      class="stadium">{{ data.ground.name }}</div>
     <div
+      :style="{
+        direction: data.ground.type === 'away' ? 'rtl' : 'ltr'
+      }"
       class="row">
       <div
         class="team-wrapper">
@@ -18,7 +22,7 @@
           class="logo-wrapper">
           <img
             class="logo"
-            src="@/assets/logos/arsenal.png"/>
+            src="@/assets/logos/teams/arsenal.svg"/>
         </div>
         <div
           class="team">Arsenal</div>
@@ -31,14 +35,41 @@
           class="logo-wrapper">
           <img
             class="logo"
-            src="@/assets/logos/tottenham.png"/>
+            :src="require(`@/assets/logos/teams/${data.opponent.asset}`)"/>
         </div>
         <div
-          class="team">Tottenham</div>
+          class="team">{{ data.opponent.title }}</div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+const axios = require('axios')
+const dateFormat = require('dateformat')
+
+export default {
+  data () {
+    return {
+      data: null
+    }
+  },
+  beforeCreate () {
+    axios({
+      method: 'get',
+      url: 'http://localhost:8000/match/next'
+    }).then((res) => {
+      const doc = res.data.doc
+      this.data = doc
+    })
+  },
+  methods: {
+    formatDate (date) {
+      return dateFormat(date, 'dddd, mmmm dS, yyyy, h:MM:ss TT')
+    }
+  }
+}
+</script>
 
 <style scoped>
   .next-match {
@@ -52,7 +83,6 @@
     position: absolute;
     width: 13%;
     min-width: 5rem;
-    margin-top: 0.75rem;
   }
 
   .title {
