@@ -6,7 +6,8 @@
       class="tournament-logo"
       :style="{
         height: data.tournament === 'europaLeague' ? '4.5rem' : 'auto',
-        width: data.tournament === 'premierLeague' ? '5.5rem' : 'auto',
+        width: data.tournament === 'premierLeague' ? '5.5rem'
+        : data.tournament === 'leagueCup' ? '3rem' : 'auto'
       }"
       :src="require(`@/assets/logos/tournaments/${data.tournament}.png`)"/>
     <div

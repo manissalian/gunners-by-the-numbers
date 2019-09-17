@@ -8,12 +8,14 @@
         class="separator"/>
       <div
         class="title">Top Scorers</div>
-      <podium/>
+      <podium
+        type="goals"/>
       <div
         class="separator"/>
       <div
         class="title">Top Assists</div>
-      <podium/>
+      <podium
+        type="assists"/>
     </div>
     <mini-league-table/>
   </div>

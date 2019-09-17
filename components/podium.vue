@@ -2,14 +2,14 @@
   <div
     class="podium">
     <div
-      v-for="(p, i) in data"
+      v-for="(player, i) in data"
       :key="i"
       class="item"
       @click="playerClicked">
       <div
         class="img-wrapper">
         <img
-          src="@/assets/players/aubameyang.png"/>
+          :src="player.assetUrl">
       </div>
       <div
         :style="{
@@ -22,19 +22,60 @@
           color: i === 0 ? 'gold' : i === 1 ? 'silver' : '#cd7f32'
         }"
         class="info">
-        <div style="text-align: center">Pierre Emerick Aubameyang</div>
-        <div style="text-align: center">32 Goals</div>
+        <div style="text-align: center">{{ player.number }}. {{ player.name }}</div>
+        <div
+          style="
+            text-align: center;
+            text-transform: capitalize
+          ">{{ player.metric }} {{ type }}{{ player[type] > 1 ? 's' : '' }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+const axios = require('axios')
+
 export default {
+  props: ['type'],
   data () {
     return {
-      data: [0, 1, 2]
+      data: null
     }
+  },
+  created () {
+    const type = this.type
+
+    axios({
+      method: 'get',
+      url: 'http://localhost:8000/podium/' + type
+    }).then((res) => {
+      const data = res.data
+      const playerIds = Object.keys(data)
+
+      Promise.all(playerIds.map((id) => {
+        return axios({
+          method: 'get',
+          url: 'http://localhost:8000/player/id?id=' + id
+        })
+      })).then((res) => {
+        const players = res.map((player) => {
+          const playerData = player.data
+          const metric = data[playerData._id]
+          const assetUrl = require(`@/assets/players/${playerData.asset}`)
+
+          return {
+            ...playerData,
+            metric,
+            assetUrl
+          }
+        }).sort((playerA, playerB) => {
+          return playerB.metric - playerA.metric
+        }).slice(0, 3)
+
+        this.data = players
+      })
+    })
   },
   methods: {
     playerClicked () {
@@ -81,7 +122,7 @@ export default {
 
   .info {
     position: absolute;
-    width: 75%;
+    width: 85%;
     left: 50%;
     transform: translateX(-50%);
     bottom: 1.5rem;
