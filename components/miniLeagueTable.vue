@@ -6,35 +6,51 @@
       src="@/assets/logos/tournaments/premierLeague.png"/>
     <table>
       <tr
-        v-for="(t, i) in data"
+        v-for="(team, i) in data"
         :key="i"
         class="team">
         <td
-          class="position">{{ i + 1 }}</td>
-        <td>
+          class="position">{{ team.position }}</td>
+        <td
+          style="text-align: center">
           <img
-            src="@/assets/logos/teams/arsenal.svg"
+            :src="require(`@/assets/logos/teams/${team.asset}`)"
             class="logo"/>
         </td>
         <td
-          class="name">Arsenal</td>
+          class="name">{{ team.name }}</td>
         <td
-          class="games">38</td>
+          class="games">{{ team.played }}</td>
         <td
-          class="diff">+66</td>
+          class="diff">{{ team.goalsFor - team.goalsAgainst > 0 ? '+' : '' }}
+          {{ team.goalsFor - team.goalsAgainst }}</td>
         <td
-          class="points">96</td>
+          class="points">{{ (team.wins * 3) + team.draws }}</td>
       </tr>
     </table>
   </div>
 </template>
 
 <script>
+const axios = require('axios')
+
 export default {
   data () {
     return {
-      data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 18, 19]
+      data: null
     }
+  },
+  beforeCreate () {
+    axios({
+      method: 'get',
+      url: 'http://localhost:8000/leagueTable'
+    }).then((res) => {
+      if (!res.data) { return }
+
+      const teams = res.data.teams
+
+      this.data = teams
+    })
   }
 }
 </script>
@@ -45,13 +61,17 @@ export default {
     font-size: 0.8rem;
   }
 
+  td {
+    text-align: center;
+  }
+
   .title {
     width: 7rem;
   }
 
   .logo {
-    height: 1.1rem;
-    margin-top: 0.5rem;
+    height: 1.2rem;
+    margin-top: 0.4rem;
     padding-left: 0.5rem;
   }
 
@@ -59,6 +79,7 @@ export default {
     padding-left: 0.5rem;
     padding-right: 1rem;
     margin-left: 0.5rem;
+    text-align: left;
   }
 
   .diff,
