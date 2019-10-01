@@ -6,19 +6,23 @@
     <input
       type="text"
       placeholder="Title"
+      :value="opponent.title"
       @input="opponentTitleInput">
     <input
       type="text"
       placeholder="Asset"
+      :value="opponent.asset"
       @input="opponentAssetInput">
     <input
       type="number"
       placeholder="Goals"
+      :value="opponent.goals"
       @input="opponentGoalsInput">
 
     <div
       class="title">Result</div>
     <select
+      :value="result"
       @change="resultChanged">
       <option
         value="pending">Pending</option>
@@ -35,8 +39,10 @@
     <input
       type="text"
       placeholder="Name"
+      :value="ground.name"
       @input="groundNameInput">
     <select
+      :value="ground.type"
       @change="groundTypeChanged">
       <option
         value="home">Home</option>
@@ -50,11 +56,13 @@
       class="title">Date</div>
     <input
       type="datetime-local"
+      :value="formatDate(date)"
       @change="dateChanged">
 
     <div
       class="title">Tournament</div>
     <select
+      :value="tournament"
       @change="tournamentChanged">
       <option
         value="premierLeague">Premier League</option>
@@ -76,6 +84,7 @@
         class="player-inner">
         <input
           type="checkbox"
+          :checked="players.includes(player.doc._id)"
           @change="playerCheckboxChanged($event, player.doc._id)">
         <div
           class="player-name">{{ player.doc.name }}</div>
@@ -92,6 +101,7 @@
         class="player-inner">
         <input
           type="checkbox"
+          :checked="subs.includes(player.doc._id)"
           @change="subCheckboxChanged($event, player.doc._id)">
         <div
           class="player-name">{{ player.doc.name }}</div>
@@ -111,6 +121,7 @@
       :key="goal.timestamp">
       <div>Goal:</div>
       <select
+        :value="findPlayer(goal.goal) ? findPlayer(goal.goal).doc._id : null"
         @change="scorerSelected($event, i)">
         <option
           v-for="(player, i) in playersData"
@@ -122,6 +133,7 @@
       </select>
       <div>Assist:</div>
       <select
+        :value="findPlayer(goal.assist) ? findPlayer(goal.assist).doc._id : null"
         @change="assisterSelected($event, i)">
         <option
           :value="null">None</option>
@@ -140,17 +152,23 @@
       style="text-align: center">
       <div
         class="create"
-        @click="createClicked">Create</div>
+        @click="saveClicked">{{ mode === 'create' ? 'Create' : 'Update' }}</div>
     </div>
   </div>
 </template>
 
 <script>
 const axios = require('axios')
+const dateFormat = require('dateformat')
 
 export default {
   data () {
+    const matchId = this.$route.params.id
+
     return {
+      matchId,
+      mode: matchId ? 'update' : 'create',
+      matchDoc: null,
       playersData: null,
       opponent: {
         title: null,
@@ -169,7 +187,7 @@ export default {
       goals: []
     }
   },
-  beforeCreate () {
+  created () {
     axios({
       method: 'get',
       url: 'http://localhost:8000/player/all'
@@ -178,6 +196,23 @@ export default {
 
       this.playersData = rows.filter((row) => {
         return row.doc.status === 'active'
+      })
+
+      axios({
+        method: 'get',
+        url: 'http://localhost:8000/match/' + this.matchId
+      }).then((res) => {
+        const match = res.data.doc
+
+        this.matchDoc = match
+
+        if (!match) { return }
+
+        Object.keys(match).forEach((key) => {
+          if (this[key] === undefined) { return }
+
+          this[key] = match[key]
+        })
       })
     })
   },
@@ -215,7 +250,7 @@ export default {
     dateChanged (e) {
       const date = e.target.value
 
-      this.date = date
+      this.date = date + ':00.000Z'
     },
     tournamentChanged (e) {
       const tournament = e.target.value
@@ -264,7 +299,7 @@ export default {
 
       this.goals[i].assist = assister
     },
-    createClicked () {
+    saveClicked () {
       const opponent = this.opponent
       const result = this.result
       const ground = this.ground
@@ -272,7 +307,12 @@ export default {
       const tournament = this.tournament
       const players = this.players
       const subs = this.subs
-      const goals = this.goals
+      const goals = this.goals.map((goal) => {
+        return {
+          goal: goal.goal,
+          assist: goal.assist
+        }
+      })
 
       const data = {
         opponent,
@@ -282,17 +322,38 @@ export default {
         tournament,
         players,
         subs,
-        goals
+        goals,
+        _id: this.matchDoc && this.matchDoc._id,
+        _rev: this.matchDoc && this.matchDoc._rev
       }
 
+      const url = `http://localhost:8000/match/${this.mode}`
       axios({
         method: 'post',
-        url: 'http://localhost:8000/match/create',
+        url,
         data
       }).then((res) => {
         this.$router.push('/adminMatches')
       }).catch((err) => {
         alert(err)
+      })
+    },
+    formatDate (date) {
+      if (!date) { return }
+
+      const hours = new Date(date).getUTCHours()
+      const minutes = new Date(date).getMinutes()
+
+      const formatDigits = (digits) => {
+        return (digits < 10 ? '0' : '') + digits
+      }
+
+      return dateFormat(date, 'yyyy-mm-dd') +
+        'T' + formatDigits(hours) + ':' + formatDigits(minutes)
+    },
+    findPlayer (id) {
+      return this.playersData.find((player) => {
+        return player.doc._id === id
       })
     }
   }

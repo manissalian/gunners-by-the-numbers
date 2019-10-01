@@ -4,7 +4,8 @@
     <div
       class="match"
       v-for="(match, i) in data"
-      :key="i">
+      :key="i"
+      @click="matchClicked(i)">
       <div
         class="logo-wrapper">
         <img
@@ -62,6 +63,12 @@ export default {
     },
     createClicked () {
       this.$router.push('/adminCreateMatch')
+    },
+    matchClicked (i) {
+      const match = this.data[i]
+      const id = match.doc._id
+
+      this.$router.push('/adminCreateMatch/' + id)
     }
   }
 }
