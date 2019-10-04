@@ -145,7 +145,7 @@
       </select>
       <div
         class="delete"
-        @click="deleteClicked(i)">Delete</div>
+        @click="deleteGoalClicked(i)">Delete</div>
     </div>
 
     <div
@@ -153,6 +153,10 @@
       <div
         class="create"
         @click="saveClicked">{{ mode === 'create' ? 'Create' : 'Update' }}</div>
+      <div
+        v-if="mode === 'update'"
+        class="delete"
+        @click="deleteClicked">Delete</div>
     </div>
   </div>
 </template>
@@ -286,7 +290,7 @@ export default {
 
       this.goals.push(goal)
     },
-    deleteClicked (i) {
+    deleteGoalClicked (i) {
       this.goals.splice(i, 1)
     },
     scorerSelected (e, i) {
@@ -355,6 +359,23 @@ export default {
       return this.playersData.find((player) => {
         return player.doc._id === id
       })
+    },
+    deleteClicked () {
+      const {
+        _id,
+        _rev
+      } = this.matchDoc
+
+      axios({
+        method: 'delete',
+        url: 'http://localhost:8000/match/delete',
+        data: {
+          _id,
+          _rev
+        }
+      }).then((res) => {
+        this.$router.push('/adminMatches')
+      })
     }
   }
 }
@@ -417,13 +438,19 @@ export default {
     margin-right: 1rem;
   }
 
-  .create {
+  .create,
+  .delete {
     display: inline-block;
     padding: 0.5rem 4rem;
-    margin-top: 3rem;
+    margin: 3rem 1rem 0rem 1rem;
+    font-weight: bold;
     color: white;
     background-color: #00a000;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+  .delete {
+    background-color: #f00000;
   }
 </style>
