@@ -5,7 +5,7 @@
       v-for="(player, i) in data"
       :key="i"
       class="item"
-      @click="playerClicked">
+      @click="playerClicked(player._id)">
       <div
         class="img-wrapper">
         <img
@@ -56,7 +56,7 @@ export default {
       Promise.all(playerIds.map((id) => {
         return axios({
           method: 'get',
-          url: 'http://localhost:8000/player/id?id=' + id
+          url: 'http://localhost:8000/player/' + id
         })
       })).then((res) => {
         const players = res.map((player) => {
@@ -76,8 +76,8 @@ export default {
     })
   },
   methods: {
-    playerClicked () {
-      this.$router.push('/playerProfile')
+    playerClicked (id) {
+      this.$router.push(`/playerProfile/${id}`)
     }
   }
 }

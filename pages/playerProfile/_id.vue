@@ -4,36 +4,38 @@
     <div
       class="top">
       <img
-        :src="`http://localhost:8000/asset/f65446f7594ca97e224662a3bf0059c8?asset=player_big.png`">
+        :src="`http://localhost:8000/asset/${playerId}?asset=player_big.png`">
       <div
         class="info">
         <div
-          class="title">14. Pierre Emerick Aubameyang</div>
+          class="title">{{ player.number }}. {{ player.name }}</div>
         <table>
-          <tr>
-            <th>Games:</th>
-            <td>30</td>
-          </tr>
-          <tr>
-            <th>Wins:</th>
-            <td>20</td>
-          </tr>
-          <tr>
-            <th>Draws:</th>
-            <td>7</td>
-          </tr>
-          <tr>
-            <th>Losses:</th>
-            <td>3</td>
-          </tr>
-          <tr>
-            <th>Goals:</th>
-            <td>22</td>
-          </tr>
-          <tr>
-            <th>Assists:</th>
-            <td>11</td>
-          </tr>
+          <tbody>
+            <tr>
+              <th>Games:</th>
+              <td>{{ starts }} (+{{ subs }})</td>
+            </tr>
+            <tr>
+              <th>Wins:</th>
+              <td>{{ wins }}</td>
+            </tr>
+            <tr>
+              <th>Draws:</th>
+              <td>{{ draws }}</td>
+            </tr>
+            <tr>
+              <th>Losses:</th>
+              <td>{{ losses }}</td>
+            </tr>
+            <tr>
+              <th>Goals:</th>
+              <td>{{ goals }}</td>
+            </tr>
+            <tr>
+              <th>Assists:</th>
+              <td>{{ assists }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -41,7 +43,80 @@
 </template>
 
 <script>
+const axios = require('axios')
+
 export default {
+  data () {
+    const playerId = this.$route.params.id
+
+    return {
+      playerId,
+      player: {
+        name: null,
+        number: null
+      },
+      starts: 0,
+      subs: 0,
+      wins: 0,
+      draws: 0,
+      losses: 0,
+      goals: 0,
+      assists: 0
+    }
+  },
+  created () {
+    const id = this.playerId
+    axios({
+      method: 'get',
+      url: 'http://localhost:8000/player/' + id
+    }).then((res) => {
+      const player = res.data
+      this.player = player
+
+      axios({
+        method: 'get',
+        url: 'http://localhost:8000/match/player/' + id
+      }).then((res) => {
+        const matches = res.data
+
+        this.starts = matches.reduce((total, match) => {
+          return total + (match.doc.players.includes(id) ? 1 : 0)
+        }, 0)
+
+        this.subs = matches.reduce((total, match) => {
+          return total + (match.doc.subs.includes(id) ? 1 : 0)
+        }, 0)
+
+        this.wins = matches.reduce((total, match) => {
+          return total + (match.doc.result === 'win' ? 1 : 0)
+        }, 0)
+
+        this.draws = matches.reduce((total, match) => {
+          return total + (match.doc.result === 'draw' ? 1 : 0)
+        }, 0)
+
+        this.losses = matches.reduce((total, match) => {
+          return total + (match.doc.result === 'lose' ? 1 : 0)
+        }, 0)
+
+        this.goals = matches.reduce((total, match) => {
+          const goals = match.doc.goals
+          const scored = goals.filter((goal) => {
+            return goal.goal === id
+          })
+          return total + scored.length
+        }, 0)
+
+        this.assists = matches.reduce((total, match) => {
+          const goals = match.doc.goals
+          const assisted = goals.filter((goal) => {
+            return goal.assist === id
+          })
+          return total + assisted.length
+        }, 0)
+      })
+    })
+  }
 }
 </script>
 

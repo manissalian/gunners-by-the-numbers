@@ -27,7 +27,7 @@
           class="logo-wrapper">
           <img
             class="logo"
-            src="@/assets/logos/teams/arsenal.svg"/>
+            src="@/assets/logos/arsenal.svg"/>
         </div>
         <div
           class="team">Arsenal</div>
