@@ -4,7 +4,7 @@
     <div
       class="top">
       <img
-        src="@/assets/players_big/aubameyang.png">
+        :src="`http://localhost:8000/asset/f65446f7594ca97e224662a3bf0059c8?asset=player_big.png`">
       <div
         class="info">
         <div

@@ -9,7 +9,7 @@
       <div
         class="img-wrapper">
         <img
-          :src="player.assetUrl">
+          :src="`http://localhost:8000/asset/${player._id}?asset=player.png`">
       </div>
       <div
         :style="{
@@ -62,12 +62,10 @@ export default {
         const players = res.map((player) => {
           const playerData = player.data
           const metric = data[playerData._id]
-          const assetUrl = require(`@/assets/players/${playerData.asset}`)
 
           return {
             ...playerData,
-            metric,
-            assetUrl
+            metric
           }
         }).sort((playerA, playerB) => {
           return playerB.metric - playerA.metric
