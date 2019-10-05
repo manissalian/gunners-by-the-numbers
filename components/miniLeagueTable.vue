@@ -14,7 +14,7 @@
         <td
           style="text-align: center">
           <img
-            :src="require(`@/assets/logos/teams/${team.asset}`)"
+            :src="`http://localhost:8000/asset/leagueTable?asset=${team.asset}`"
             class="logo"/>
         </td>
         <td

@@ -8,16 +8,17 @@
       placeholder="Title"
       :value="opponent.title"
       @input="opponentTitleInput">
-    <input
-      type="text"
-      placeholder="Asset"
-      :value="opponent.asset"
-      @input="opponentAssetInput">
+    <span>Goals: </span>
     <input
       type="number"
       placeholder="Goals"
       :value="opponent.goals"
       @input="opponentGoalsInput">
+    <span>Logo: </span>
+    <input
+      type="file"
+      accept="image/*"
+      @change="imageUploaded">
 
     <div
       class="title">Result</div>
@@ -144,7 +145,7 @@
           :value="player.doc._id">{{ player.doc.name }}</option>
       </select>
       <div
-        class="delete"
+        class="delete-goal"
         @click="deleteGoalClicked(i)">Delete</div>
     </div>
 
@@ -176,7 +177,6 @@ export default {
       playersData: null,
       opponent: {
         title: null,
-        asset: null,
         goals: 0
       },
       result: 'pending',
@@ -188,7 +188,11 @@ export default {
       tournament: 'premierLeague',
       players: [],
       subs: [],
-      goals: []
+      goals: [],
+      opponentAsset: {
+        path: null,
+        type: null
+      }
     }
   },
   created () {
@@ -225,11 +229,6 @@ export default {
       const opponentTitle = e.target.value
 
       this.opponent.title = opponentTitle
-    },
-    opponentAssetInput (e) {
-      const opponentAsset = e.target.value
-
-      this.opponent.asset = opponentAsset
     },
     opponentGoalsInput (e) {
       const opponentGoals = e.target.value
@@ -305,6 +304,7 @@ export default {
     },
     saveClicked () {
       const opponent = this.opponent
+      const opponentAsset = this.opponentAsset
       const result = this.result
       const ground = this.ground
       const date = this.date
@@ -320,6 +320,7 @@ export default {
 
       const data = {
         opponent,
+        opponentAsset,
         result,
         ground,
         date,
@@ -376,6 +377,27 @@ export default {
       }).then((res) => {
         this.$router.push('/adminMatches')
       })
+    },
+    imageUploaded (e) {
+      const file = e.target.files[0]
+
+      const formData = new FormData()
+      formData.append('file', file)
+
+      axios({
+        method: 'post',
+        url: 'http://localhost:8000/upload/file',
+        data: formData,
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        const path = res.data.path
+        const type = file.type
+
+        this.opponentAsset.path = path
+        this.opponentAsset.type = type
+      })
     }
   }
 }
@@ -428,7 +450,7 @@ export default {
     white-space: pre-wrap;
   }
 
-  .delete {
+  .delete-goal {
     color: #f00000;
     cursor: pointer;
   }

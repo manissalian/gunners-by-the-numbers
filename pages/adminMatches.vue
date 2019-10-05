@@ -10,7 +10,7 @@
         class="logo-wrapper">
         <img
           class="logo"
-          :src="require(`@/assets/logos/teams/${match.doc.opponent.asset}`)">
+          :src="`http://localhost:8000/asset/${match.doc._id}?asset=opponentLogo`">
       </div>
       <div
         class="title">

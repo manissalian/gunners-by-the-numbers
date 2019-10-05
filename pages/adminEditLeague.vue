@@ -44,7 +44,7 @@
               class="logo-wrapper">
               <img
                 class="logo"
-                :src="require(`@/assets/logos/teams/${team.asset}`)"/>
+                :src="`http://localhost:8000/asset/leagueTable?asset=${team.asset}`"/>
             </div>
             <span
               class="name">
