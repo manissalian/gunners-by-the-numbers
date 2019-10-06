@@ -3,8 +3,18 @@
     class="header">
     <div
       class="inner">
-      <router-link to="/">
+      <router-link
+        to="/">
         <logo/>
+      </router-link>
+      <router-link
+        to="/players"
+        :style="{
+          fontWeight: path === '/players' ? 'bold' : 'normal',
+          borderBottomWidth: path === '/players' ? '1px' : '0px'
+        }"
+        class="btn">
+        <div>Players</div>
       </router-link>
     </div>
   </div>
@@ -16,6 +26,11 @@ import Logo from '@/components/logo'
 export default {
   components: {
     Logo
+  },
+  computed: {
+    path () {
+      return this.$route.path
+    }
   }
 }
 </script>
@@ -44,5 +59,15 @@ export default {
     font-weight: bold;
     font-style: italic;
     color: white;
+  }
+
+  .btn {
+    margin-left: 3rem;
+    font-size: 1.15rem;
+    color: white;
+    text-decoration: none;
+    border-width: 0px;
+    border-color: white;
+    border-style: solid;
   }
 </style>
