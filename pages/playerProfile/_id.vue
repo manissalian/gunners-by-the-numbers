@@ -39,13 +39,21 @@
         </table>
       </div>
     </div>
+    <PlayerMatchlist
+      :playerId="playerId"
+      :matches="matches"/>
+    </div>
   </div>
 </template>
 
 <script>
+import PlayerMatchlist from '@/components/playerMatchlist'
 const axios = require('axios')
 
 export default {
+  components: {
+    PlayerMatchlist
+  },
   data () {
     const playerId = this.$route.params.id
 
@@ -55,6 +63,7 @@ export default {
         name: null,
         number: null
       },
+      matches: null,
       starts: 0,
       subs: 0,
       wins: 0,
@@ -78,6 +87,7 @@ export default {
         url: 'http://localhost:8000/match/player/' + id
       }).then((res) => {
         const matches = res.data
+        this.matches = matches
 
         this.starts = matches.reduce((total, match) => {
           return total + (match.doc.players.includes(id) ? 1 : 0)
