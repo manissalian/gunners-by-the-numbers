@@ -329,7 +329,8 @@ export default {
         subs,
         goals,
         _id: this.matchDoc && this.matchDoc._id,
-        _rev: this.matchDoc && this.matchDoc._rev
+        _rev: this.matchDoc && this.matchDoc._rev,
+        _attachments: this.matchDoc && this.matchDoc._attachments
       }
 
       const url = `http://localhost:8000/match/${this.mode}`
