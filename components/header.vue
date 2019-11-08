@@ -8,13 +8,15 @@
         <logo/>
       </router-link>
       <router-link
-        to="/players"
+        v-for="(page, i) in pages"
+        :key="i"
+        :to="page.path"
         :style="{
-          fontWeight: path === '/players' ? 'bold' : 'normal',
-          borderBottomWidth: path === '/players' ? '1px' : '0px'
+          fontWeight: path === page.path ? 'bold' : 'normal',
+          borderBottomWidth: path === page.path ? '1px' : '0px'
         }"
         class="btn">
-        <div>Players</div>
+        <div>{{ page.title }}</div>
       </router-link>
     </div>
   </div>
@@ -26,6 +28,20 @@ import Logo from '@/components/logo'
 export default {
   components: {
     Logo
+  },
+  data () {
+    return {
+      pages: [
+        {
+          path: '/players',
+          title: 'Players'
+        },
+        {
+          path: '/schedule',
+          title: 'Schedule'
+        }
+      ]
+    }
   },
   computed: {
     path () {
