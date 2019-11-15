@@ -1,6 +1,6 @@
 <template>
   <div
-    class="player-match-list">
+    class="match-list">
     <div
       v-for="(match, i) in data"
       :key="i"
@@ -50,6 +50,7 @@
           class="score">{{ match.doc.goals.length }} - {{ match.doc.opponent.goals }}</div>
       </div>
       <div
+        v-if="playerId"
         class="player-stats">
         <div
           class="goals">
@@ -91,7 +92,7 @@ export default {
       const unsortedMatches = this.matches
 
       return unsortedMatches && unsortedMatches.sort((matchA, matchB) => {
-        return new Date(matchA.doc.date) - new Date(matchB.doc.date)
+        return new Date(matchB.doc.date) - new Date(matchA.doc.date)
       })
     }
   },

@@ -39,7 +39,7 @@
         </table>
       </div>
     </div>
-    <PlayerMatchlist
+    <MatchList
       :playerId="playerId"
       :matches="matches"/>
     </div>
@@ -47,12 +47,12 @@
 </template>
 
 <script>
-import PlayerMatchlist from '@/components/playerMatchlist'
+import MatchList from '@/components/matchList'
 const axios = require('axios')
 
 export default {
   components: {
-    PlayerMatchlist
+    MatchList
   },
   data () {
     const playerId = this.$route.params.id

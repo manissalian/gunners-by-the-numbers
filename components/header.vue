@@ -39,6 +39,10 @@ export default {
         {
           path: '/schedule',
           title: 'Schedule'
+        },
+        {
+          path: '/results',
+          title: 'Results'
         }
       ]
     }
