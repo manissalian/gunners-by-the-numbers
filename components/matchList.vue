@@ -75,6 +75,11 @@
             class="assists-count">{{ getAssists(match) }}</div>
         </div>
       </div>
+      <div
+        v-if="match.doc.subs.includes(playerId)"
+        class="substituted">
+        Subbed in
+      </div>
     </div>
   </div>
 </template>
@@ -118,6 +123,7 @@ export default {
 
 <style scoped>
 .match {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -187,6 +193,18 @@ export default {
 
 .assists-logo {
   width: 2.75rem;
+}
+
+.substituted {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  margin: 0;
+  height: 1.3rem;
+  line-height: 1.3rem;
+  border-bottom: 1px solid black;
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 @media screen and (min-width: 768px) {
