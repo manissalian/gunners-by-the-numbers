@@ -43,13 +43,13 @@ export default {
   .title {
     text-align: center;
     font-size: 1.5rem;
-    margin-top: 4rem;
+    margin-top: 3rem;
   }
 
   .separator {
     height: 1px;
     background-color: rgba(0, 0, 0, 0.2);
-    margin-top: 4rem;
+    margin-top: 3rem;
     max-width: 768px;
     margin-left: auto;
     margin-right: auto;
