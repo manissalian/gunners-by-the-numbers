@@ -43,6 +43,10 @@ export default {
         {
           path: '/results',
           title: 'Results'
+        },
+        {
+          path: '/statsTable',
+          title: 'Stats Table'
         }
       ]
     }
