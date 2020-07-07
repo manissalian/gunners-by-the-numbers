@@ -18,6 +18,7 @@
           :style="{
             height: match.doc.tournament === 'europaLeague' ? '4.5rem' : 'auto',
             width: match.doc.tournament === 'premierLeague' ? '6rem'
+            : match.doc.tournament === 'faCup' ? '5rem'
             : match.doc.tournament === 'leagueCup' ? '3rem' : 'auto'
           }"
           :src="require(`@/assets/logos/tournaments/${match.doc.tournament}.png`)"/>
